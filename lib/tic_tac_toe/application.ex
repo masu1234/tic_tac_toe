@@ -10,6 +10,7 @@ defmodule TicTacToe.Application do
     children = [
       # Starts a worker by calling: TicTacToe.Worker.start_link(arg)
       # {TicTacToe.Worker, arg}
+      {TicTacToe.Game, nil}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
