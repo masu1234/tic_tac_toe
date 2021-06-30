@@ -15,17 +15,21 @@ defmodule TicTacToe.Grid do
     |> Enum.join("|")
   end
 
-  def valid_move?(grid, x, y) do
-    if x >= 0 and x < 3 and y >= 0 and y < 3 do
+  def valid_move?(grid, x, y) when x >= 0 and x < 3 and y >= 0 and y < 3 do
       get_mark_at(grid, x, y) == :b
-    else
-      false
-    end
   end
+
+  def valid_move?(_grid, _x, _y), do: false
 
   defp get_mark_at(grid, x, y) do
     grid
     |> Enum.at(x)
     |> Enum.at(y)
+  end
+
+  def draw?(grid) do
+    grid
+    |> List.flatten()
+    |> Enum.all?(&(&1 in [:o, :x]))
   end
 end
