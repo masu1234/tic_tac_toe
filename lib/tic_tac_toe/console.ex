@@ -6,7 +6,14 @@ defmodule TicTacToe.Console do
   alias TicTacToe.Player
 
   def start_link(_arg) do
-    GenServer.start_link(__MODULE__, %{}, name: __MODULE__)
+    mode =
+      case Sysmte.get_env("GAME_MODE") do
+        "1" -> :human_vs_human
+        "2" -> :human_vs_computer
+        "_" -> :human_vs_human
+      end
+
+    GenServer.start_link(__MODULE__, %{mode: mode}, name: __MODULE__)
   end
 
   def init(state) do
@@ -33,6 +40,7 @@ defmodule TicTacToe.Console do
       _ -> Game.set_last_error("Syntax error.")
     end
 
+    judge_result()
     Process.send(__MODULE__, :process_command, [])
     {:noreply, state}
   end
@@ -85,5 +93,27 @@ defmodule TicTacToe.Console do
     else
       Game.set_last_error("Invalid move.")
     end
+  end
+
+  defp judge_result do
+    grid = Game.get_grid()
+
+    cond do
+      winner = Grid.get_winner(grid) -> display_winner(winner)
+      Grid.draw?(grid) -> draw()
+      true -> Process.send(__MODULE__, :process_command, [])
+    end
+  end
+
+  defp draw do
+    refresh_screen()
+    IO.puts("Draw.")
+    System.halt(0)
+  end
+
+  defp display_winner(winner) do
+    refresh_screen()
+    IO.puts("Player" <> Player.to_string(winner) <> " wins!")
+    System.halt(0)
   end
 end
