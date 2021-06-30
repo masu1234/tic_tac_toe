@@ -178,3 +178,25 @@ State: %{}
 15:57:25.680 [info] The game agent started.
 15:57:25.683 [info] The console started.
 15:57:25.688 [debug] state: %{}
+16:17:24.095 [info] The game agent started.
+16:17:24.099 [info] Application tic_tac_toe exited: TicTacToe.Application.start(:normal, []) returned an error: shutdown: failed to start child: TicTacToe.Console
+    ** (EXIT) an exception was raised:
+        ** (UndefinedFunctionError) function Sysmte.get_env/1 is undefined (module Sysmte is not available)
+            Sysmte.get_env("GAME_MODE")
+            (tic_tac_toe 0.1.0) lib/tic_tac_toe/console.ex:10: TicTacToe.Console.start_link/1
+            (stdlib 3.15) supervisor.erl:414: :supervisor.do_start_child_i/3
+            (stdlib 3.15) supervisor.erl:400: :supervisor.do_start_child/2
+            (stdlib 3.15) supervisor.erl:384: anonymous fn/3 in :supervisor.start_children/2
+            (stdlib 3.15) supervisor.erl:1234: :supervisor.children_map/4
+            (stdlib 3.15) supervisor.erl:350: :supervisor.init_children/2
+            (stdlib 3.15) gen_server.erl:423: :gen_server.init_it/2
+16:17:24.106 [info] Application logger_file_backend exited: :stopped
+16:18:47.614 [info] The game agent started.
+16:18:47.617 [info] The console started.
+16:18:47.622 [debug] state: %{mode: :human_vs_computer}
+16:20:49.965 [info] The game agent started.
+16:20:49.968 [info] The console started.
+16:20:49.973 [debug] state: %{mode: :computer_vs_computer}
+16:21:04.740 [info] The game agent started.
+16:21:04.744 [info] The console started.
+16:21:04.751 [debug] state: %{mode: :computer_vs_computer}

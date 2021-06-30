@@ -7,9 +7,10 @@ defmodule TicTacToe.Console do
 
   def start_link(_arg) do
     mode =
-      case Sysmte.get_env("GAME_MODE") do
+      case System.get_env("GAME_MODE") do
         "1" -> :human_vs_human
         "2" -> :human_vs_computer
+        "3" -> :computer_vs_computer
         "_" -> :human_vs_human
       end
 
@@ -28,6 +29,19 @@ defmodule TicTacToe.Console do
   def handle_info(:process_command, state) do
     refresh_screen()
 
+    case {state.mode, Game.get_turn()} do
+      {:human_vs_human, _} -> human_turn()
+      {:human_vs_computer, :o} -> human_turn()
+      {:human_vs_computer, :x} -> computer_turn()
+      {:computer_vs_computer, _} -> computer_turn()
+    end
+
+    judge_result()
+    Process.send(__MODULE__, :process_command, [])
+    {:noreply, state}
+  end
+
+  defp human_turn do
     move =
       get_prompt()
       |> IO.gets()
@@ -39,10 +53,14 @@ defmodule TicTacToe.Console do
       {x, y} when is_integer(x) and is_integer(y) -> move(x, y)
       _ -> Game.set_last_error("Syntax error.")
     end
+  end
 
-    judge_result()
-    Process.send(__MODULE__, :process_command, [])
-    {:noreply, state}
+  defp computer_turn do
+    :timer.sleep(500)
+
+    grid = Game.get_grid()
+    {x, y} = Enum.random(Grid.get_blank_cells(grid))
+    Game.put_mark(x, y)
   end
 
   defp get_prompt do
