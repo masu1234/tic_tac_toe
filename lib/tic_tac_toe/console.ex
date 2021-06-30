@@ -1,6 +1,8 @@
 defmodule TicTacToe.Console do
   use GenServer
   import TicTacToe, only: [info: 1, debug: 2], warn: false
+  alias TicTacToe.Game
+  alias TicTacToe.Grid
 
   def start_link(_arg) do
     GenServer.start_link(__MODULE__, %{}, name: __MODULE__)
@@ -16,6 +18,8 @@ defmodule TicTacToe.Console do
   end
 
   def handle_info(:process_command, state) do
+    refresh_screen()
+
     move =
       "Enter your move> "
       |> IO.gets()
@@ -53,4 +57,10 @@ defmodule TicTacToe.Console do
   end
 
   defp do_parse_move(_), do: :error
+
+  defp refresh_screen do
+    grid = Game.get_grid()
+    IO.puts(Grid.render(grid))
+    IO.puts("\n")
+  end
 end
