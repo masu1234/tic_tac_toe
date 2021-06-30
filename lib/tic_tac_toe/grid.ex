@@ -32,4 +32,32 @@ defmodule TicTacToe.Grid do
     |> List.flatten()
     |> Enum.all?(&(&1 in [:o, :x]))
   end
+
+  def get_winner(grid) do
+    lines = grid ++ transpose(grid) ++ diagonals(grid)
+
+    line =
+      Enum.find(lines, fn line ->
+        line == [:o, :o, :o] or line == [:x, :x, :x]
+      end)
+
+    if line, do: List.first(line), else: nil
+  end
+
+  defp transpose(grid) do
+    grid
+    |> List.zip()
+    |> Enum.map(&Tuple.to_list/1)
+  end
+
+  defp diagonals(grid) do
+    [diagonal(grid), diagonal(Enum.reverse(grid))]
+  end
+
+  defp diagonal(grid) do
+    grid
+    |> Enum.with_index()
+    |> Enum.map(fn {row, index} -> Enum.at(row, index) end)
+
+  end
 end
